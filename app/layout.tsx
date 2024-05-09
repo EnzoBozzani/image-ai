@@ -13,8 +13,8 @@ export const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-	title: 'PDF Translator',
-	description: 'Traduza seus PDFs com o poder da IA!',
+	title: 'ImageAI',
+	description: 'Acessibilidade já! Crie descrições de imagens!',
 };
 
 export default function RootLayout({

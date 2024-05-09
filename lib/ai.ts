@@ -23,8 +23,6 @@ export async function generateTranslation(fileContent: File) {
 
 	const imagePart = await Promise.all([fileContent].map(fileToGenerativePart));
 
-	console.log(imagePart);
-
 	const result = await model.generateContent([prompt, ...imagePart]);
 	const response = await result.response;
 	const text = response.text();
