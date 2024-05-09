@@ -12,7 +12,7 @@ import { generateDescription } from '@/lib/ai';
 import { FileDropzone } from '@/components/FileDropzone';
 
 const HomePage = () => {
-	const [description, setDescription] = useState<string | null>(null);
+	const [description, setDescription] = useState<{ [key: number]: string } | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleFileSend = async (files: File[]) => {
@@ -94,7 +94,7 @@ const HomePage = () => {
 				</p>
 			</section>
 			<section className='mx-auto flex items-center justify-center w-[95%]'>
-				<div className='w-[100%] border rounded-xl text-xl bg-neutral-100 p-4 flex items-center justify-center'>
+				<div className='w-[100%] border rounded-xl text-xl bg-neutral-100 p-4'>
 					{isLoading ? (
 						<div className='w-full space-y-2'>
 							<Skeleton className='h-4 w-full' />
@@ -107,7 +107,7 @@ const HomePage = () => {
 							<Skeleton className='h-4 w-1/2' />
 						</div>
 					) : description ? (
-						<p className='text-justify'>{description}</p>
+						Object.values(description).map((text) => <p className='text-justify'>{text}</p>)
 					) : (
 						<p className='font-semibold'>Selecione imagens para obter a descrição</p>
 					)}

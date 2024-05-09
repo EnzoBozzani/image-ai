@@ -20,7 +20,7 @@ export async function generateDescription(files: File[]) {
 	const model = genAI.getGenerativeModel({ model: 'gemini-pro-vision' });
 
 	const prompt =
-		'Descreva as imagens detalhadamente, a descrição será usada como acessibilidade para deficientes visuais. O formato de saída deve ser: Imagem 1: ... \n\nImagem 2: ... e por aí vaí.';
+		'Descreva as imagens detalhadamente, a descrição será usada como acessibilidade para deficientes visuais. O formato de saída deve um JSON, onde cada par chave-valor terá a chave como o número da imagem (de 1 a n) e o valor a descrição gerada: Imagem 1: ... \n\nImagem 2: ... e por aí vaí.';
 
 	const imagePart = await Promise.all(files.map(fileToGenerativePart));
 
@@ -29,7 +29,9 @@ export async function generateDescription(files: File[]) {
 		const response = await result.response;
 		const text = response.text();
 
-		return { ok: true, text };
+		const json = JSON.parse(text.replace('json', '').replaceAll('```', ''));
+
+		return { ok: true, text: json };
 	} catch (error) {
 		console.log(error);
 		return { ok: false };
