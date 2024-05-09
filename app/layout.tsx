@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
+import { Montserrat } from 'next/font/google';
+
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/sonner';
-import { Montserrat } from 'next/font/google';
-import { Viewer } from '@/components/Viewer';
+
+import './globals.css';
 
 export const montserrat = Montserrat({
 	subsets: ['latin'],
