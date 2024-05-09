@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, useRef, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { BsCardImage } from 'react-icons/bs';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
@@ -9,35 +9,35 @@ import { FiClipboard } from 'react-icons/fi';
 
 import { Skeleton } from '@/components/ui/skeleton';
 import { generateDescription } from '@/lib/ai';
-import { cn } from '@/lib/utils';
+import { FileDropzone } from '@/components/FileDropzone';
 
 const HomePage = () => {
-	const inputRef = useRef<HTMLInputElement | null>(null);
 	const [description, setDescription] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 
-	const handleClick = () => {
-		inputRef.current?.click();
-	};
-
-	const handleFileChange = async (ev: ChangeEvent<HTMLInputElement>) => {
+	const handleFileSend = async (files: File[]) => {
 		setIsLoading(true);
-		if (!ev.target.files) return;
 
-		if (ev.target.files.length > 10) {
+		if (files.length === 0) {
+			toast.error('Você deve enviar pelo menos uma imagem!');
+			setIsLoading(false);
+			return;
+		}
+
+		if (files.length > 10) {
 			toast.error('Você só pode enviar até 10 imagens por vez!');
 			setIsLoading(false);
 			return;
 		}
 
-		for (let i = 0; i < ev.target.files.length; i++) {
-			if (ev.target.files[i].type !== 'image/png' && ev.target.files[i].type !== 'image/jpeg') {
+		for (let i = 0; i < files.length; i++) {
+			if (files[i].type !== 'image/png' && files[i].type !== 'image/jpeg') {
 				toast.error('Apenas imagens PNG e JPEG são aceitas!');
 				return;
 			}
 		}
 
-		const res = await generateDescription(ev.target.files);
+		const res = await generateDescription(files);
 
 		if (!res.ok) {
 			toast.error('Ocorreu um erro ao tentar gerar a descrição das imagens!');
@@ -52,7 +52,7 @@ const HomePage = () => {
 
 	return (
 		<main className='mx-auto max-w-screen-xl text-black p-6'>
-			<header className='flex items-center justify-between'>
+			<header className='flex items-center justify-between w-[95%] mx-auto'>
 				<div className='flex items-center gap-x-2'>
 					<BsCardImage className='h-12 w-12 text-indigo-700' />
 					<p className='text-3xl bg-gradient-to-r from-blue-500 to-rose-400 inline-block text-transparent bg-clip-text font-bold '>
@@ -74,40 +74,27 @@ const HomePage = () => {
 					</Link>
 				</div>
 			</header>
-			<section className='flex justify-center items-center flex-col gap-y-8 mt-12 mb-24 w-full'>
+			<section className='flex justify-center items-center flex-col gap-y-8 mt-12 mb-8 w-full'>
 				<div className='flex flex-col justify-center items-center gap-y-2'>
-					<h1 className='text-6xl text-center bg-gradient-to-r from-indigo-700 via-blue-500 to-rose-400 inline-block text-transparent bg-clip-text font-bold '>
+					<h1 className='text-3xl sm:text-6xl text-center bg-gradient-to-r from-indigo-700 via-blue-500 to-rose-400 inline-block text-transparent bg-clip-text font-bold '>
 						Bem vindo ao ImageAI!
 					</h1>
-					<p className='text-center text-neutral-600 w-[62%]'>
+					<p className='text-sm sm:text-base text-center text-neutral-600 w-[90%] sm:w-[62%]'>
 						Receba a descrição de imagens para acessibilidade de maneira extremamente detalhada utilizando
 						todo o poder do Gemini, a inteligência artificial do Google!
 					</p>
 				</div>
-				<input
-					type='file'
-					multiple
-					className='hidden'
-					ref={inputRef}
-					onChange={handleFileChange}
+				<FileDropzone
+					handleFileSend={handleFileSend}
+					isLoading={isLoading}
 				/>
-				<button
-					className={cn(
-						'text-3xl px-8 py-4 bg-blue-700 rounded-xl text-white font-semibold',
-						isLoading || 'hover:bg-blue-800'
-					)}
-					onClick={handleClick}
-					disabled={isLoading}
-				>
-					{isLoading ? 'Carregando...' : 'Selecionar imagem'}
-				</button>
-				<p className='text-center text-neutral-600 w-[62%]'>
-					Chega de imagens sem descrição de acessibilidade para deficientes visuais... Com o ImageAI, você
-					gera descrições detalhadas de imagens em segundos!
+				<p className='text-sm sm:text-base text-center text-neutral-600 w-[90%] sm:w-[62%]'>
+					Chega de imagens sem acessibilidade para deficientes visuais... Com o ImageAI, você gera descrições
+					detalhadas de imagens em segundos!
 				</p>
 			</section>
-			<section className='mx-auto flex items-center justify-center w-[90%]'>
-				<div className='w-[100%] border rounded-xl text-xl bg-neutral-100 p-4 flex items-center justify-center h-[250px] overflow-y-scroll'>
+			<section className='mx-auto flex items-center justify-center w-[95%]'>
+				<div className='w-[100%] border rounded-xl text-xl bg-neutral-100 p-4 flex items-center justify-center'>
 					{isLoading ? (
 						<div className='w-full space-y-2'>
 							<Skeleton className='h-4 w-full' />
