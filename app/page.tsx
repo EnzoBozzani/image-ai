@@ -3,14 +3,17 @@
 import { ChangeEvent, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { BsCardImage } from 'react-icons/bs';
-
-import { generateTranslation } from '@/lib/ai';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import Link from 'next/link';
+import { FiClipboard } from 'react-icons/fi';
+
+import { Skeleton } from '@/components/ui/skeleton';
+import { generateDescription } from '@/lib/ai';
+import { cn } from '@/lib/utils';
 
 const HomePage = () => {
 	const inputRef = useRef<HTMLInputElement | null>(null);
-	const [translation, setTranslation] = useState<string | null>(null);
+	const [description, setDescription] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleClick = () => {
@@ -21,24 +24,28 @@ const HomePage = () => {
 		setIsLoading(true);
 		if (!ev.target.files) return;
 
-		console.log(ev.target.files);
+		if (ev.target.files.length > 10) {
+			toast.error('Você só pode enviar até 10 imagens por vez!');
+			setIsLoading(false);
+			return;
+		}
 
-		// for (let i = 0; i < ev.target.files.length; i++) {
-		// 	if (ev.target.files[i].type !== 'image/png' && ev.target.files[i].type !== 'image/jpeg') {
-		// 		toast.error('Apenas imagens PNG e JPEG são aceitas!');
-		// 		return;
-		// 	}
-		// }
+		for (let i = 0; i < ev.target.files.length; i++) {
+			if (ev.target.files[i].type !== 'image/png' && ev.target.files[i].type !== 'image/jpeg') {
+				toast.error('Apenas imagens PNG e JPEG são aceitas!');
+				return;
+			}
+		}
 
-		// const res = await generateTranslation(ev.target.files);
+		const res = await generateDescription(ev.target.files);
 
-		// if (!res.ok) {
-		// 	toast.error('Ocorreu um erro ao tentar gerar a descrição das imagens!');
-		// 	setIsLoading(false);
-		// 	return;
-		// }
+		if (!res.ok) {
+			toast.error('Ocorreu um erro ao tentar gerar a descrição das imagens!');
+			setIsLoading(false);
+			return;
+		}
 
-		// setTranslation(res.text as string);
+		setDescription(res.text as string);
 
 		setIsLoading(false);
 	};
@@ -80,29 +87,40 @@ const HomePage = () => {
 				<input
 					type='file'
 					multiple
-					max={2}
-					maxLength={2}
 					className='hidden'
 					ref={inputRef}
 					onChange={handleFileChange}
 				/>
 				<button
-					className='text-3xl px-8 py-4 bg-blue-700 hover:bg-blue-800 rounded-xl text-white font-semibold'
+					className={cn(
+						'text-3xl px-8 py-4 bg-blue-700 rounded-xl text-white font-semibold',
+						isLoading || 'hover:bg-blue-800'
+					)}
 					onClick={handleClick}
+					disabled={isLoading}
 				>
-					Selecionar imagem
+					{isLoading ? 'Carregando...' : 'Selecionar imagem'}
 				</button>
 				<p className='text-center text-neutral-600 w-[62%]'>
 					Chega de imagens sem descrição de acessibilidade para deficientes visuais... Com o ImageAI, você
 					gera descrições detalhadas de imagens em segundos!
 				</p>
 			</section>
-			<section className='mx-auto flex items-center justify-center w-[80%]'>
-				<div className='w-[100%] border rounded-xl text-xl bg-neutral-100 p-8 flex items-center justify-center h-[250px]'>
+			<section className='mx-auto flex items-center justify-center w-[90%]'>
+				<div className='w-[100%] border rounded-xl text-xl bg-neutral-100 p-4 flex items-center justify-center h-[250px] overflow-y-scroll'>
 					{isLoading ? (
-						<>Carregando...</>
-					) : translation ? (
-						<p>{translation}</p>
+						<div className='w-full space-y-2'>
+							<Skeleton className='h-4 w-full' />
+							<Skeleton className='h-4 w-full' />
+							<Skeleton className='h-4 w-full' />
+							<Skeleton className='h-4 w-full' />
+							<Skeleton className='h-4 w-full' />
+							<Skeleton className='h-4 w-full' />
+							<Skeleton className='h-4 w-full' />
+							<Skeleton className='h-4 w-1/2' />
+						</div>
+					) : description ? (
+						<p className='text-justify'>{description}</p>
 					) : (
 						<p className='font-semibold'>Selecione imagens para obter a descrição</p>
 					)}
