@@ -16,16 +16,22 @@ async function fileToGenerativePart(file: File) {
 	};
 }
 
-export async function generateTranslation(fileContent: File) {
+export async function generateTranslation(files: FileList) {
 	const model = genAI.getGenerativeModel({ model: 'gemini-pro-vision' });
 
-	const prompt = 'Descreva a imagem detalhadamente, dizendo cores do ambiente e de tudo!';
+	const prompt =
+		'Descreva as imagens detalhadamente, a descrição será usada como acessibilidade para deficientes visuais. O formato de saída deve ser: Imagem 1: ... \n\nImagem 2: ... e por aí vaí';
 
-	const imagePart = await Promise.all([fileContent].map(fileToGenerativePart));
+	const imagePart = await Promise.all([files].map(fileToGenerativePart));
 
-	const result = await model.generateContent([prompt, ...imagePart]);
-	const response = await result.response;
-	const text = response.text();
+	try {
+		const result = await model.generateContent([prompt, ...imagePart]);
+		const response = await result.response;
+		const text = response.text();
 
-	return text;
+		return { ok: true, text };
+	} catch (error) {
+		console.log(error);
+		return { ok: false };
+	}
 }

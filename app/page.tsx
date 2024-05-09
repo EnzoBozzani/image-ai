@@ -10,8 +10,6 @@ import Link from 'next/link';
 
 const HomePage = () => {
 	const inputRef = useRef<HTMLInputElement | null>(null);
-
-	const [fileContent, setFileContent] = useState<string | null>(null);
 	const [translation, setTranslation] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -22,28 +20,25 @@ const HomePage = () => {
 	const handleFileChange = async (ev: ChangeEvent<HTMLInputElement>) => {
 		setIsLoading(true);
 		if (!ev.target.files) return;
-		const file = ev.target.files[0];
 
-		if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
-			toast.error('O arquivo selecionado precisa ser PNG ou JPEG!');
-			return;
-		}
+		console.log(ev.target.files);
 
-		const reader = new FileReader();
+		// for (let i = 0; i < ev.target.files.length; i++) {
+		// 	if (ev.target.files[i].type !== 'image/png' && ev.target.files[i].type !== 'image/jpeg') {
+		// 		toast.error('Apenas imagens PNG e JPEG são aceitas!');
+		// 		return;
+		// 	}
+		// }
 
-		reader.onload = (e) => {
-			const arrayBuffer = e.target?.result;
-			const base64 = btoa(
-				new Uint8Array(arrayBuffer as ArrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
-			);
-			setFileContent(base64);
-		};
+		// const res = await generateTranslation(ev.target.files);
 
-		reader.readAsArrayBuffer(file);
+		// if (!res.ok) {
+		// 	toast.error('Ocorreu um erro ao tentar gerar a descrição das imagens!');
+		// 	setIsLoading(false);
+		// 	return;
+		// }
 
-		const res = await generateTranslation(ev.target.files[0]);
-
-		setTranslation(res);
+		// setTranslation(res.text as string);
 
 		setIsLoading(false);
 	};
@@ -84,6 +79,9 @@ const HomePage = () => {
 				</div>
 				<input
 					type='file'
+					multiple
+					max={2}
+					maxLength={2}
 					className='hidden'
 					ref={inputRef}
 					onChange={handleFileChange}
