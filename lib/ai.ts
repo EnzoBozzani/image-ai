@@ -16,7 +16,7 @@ async function fileToGenerativePart(file: File) {
 	};
 }
 
-export async function generateDescription(files: File[]) {
+export async function generateDescriptions(files: File[]) {
 	const model = genAI.getGenerativeModel({ model: 'gemini-pro-vision' });
 
 	const prompt =
@@ -31,7 +31,7 @@ export async function generateDescription(files: File[]) {
 
 		const json = JSON.parse(text.replace('json', '').replaceAll('```', ''));
 
-		return { ok: true, text: json };
+		return { ok: true, descriptions: json };
 	} catch (error) {
 		console.log(error);
 		return { ok: false };

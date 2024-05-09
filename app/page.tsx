@@ -5,14 +5,14 @@ import { toast } from 'sonner';
 import { BsCardImage } from 'react-icons/bs';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import Link from 'next/link';
-import { FiClipboard } from 'react-icons/fi';
 
 import { Skeleton } from '@/components/ui/skeleton';
-import { generateDescription } from '@/lib/ai';
+import { generateDescriptions } from '@/lib/ai';
 import { FileDropzone } from '@/components/FileDropzone';
+import { ImageDescription } from '@/components/ImageDescription';
 
 const HomePage = () => {
-	const [description, setDescription] = useState<{ [key: number]: string } | null>(null);
+	const [descriptions, setDescriptions] = useState<string[] | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleFileSend = async (files: File[]) => {
@@ -33,11 +33,12 @@ const HomePage = () => {
 		for (let i = 0; i < files.length; i++) {
 			if (files[i].type !== 'image/png' && files[i].type !== 'image/jpeg') {
 				toast.error('Apenas imagens PNG e JPEG são aceitas!');
+				setIsLoading(false);
 				return;
 			}
 		}
 
-		const res = await generateDescription(files);
+		const res = await generateDescriptions(files);
 
 		if (!res.ok) {
 			toast.error('Ocorreu um erro ao tentar gerar a descrição das imagens!');
@@ -45,14 +46,14 @@ const HomePage = () => {
 			return;
 		}
 
-		setDescription(res.text as string);
+		setDescriptions(Object.values(res.descriptions).slice(0, files.length) as string[]);
 
 		setIsLoading(false);
 	};
 
 	return (
-		<main className='mx-auto max-w-screen-xl text-black p-6'>
-			<header className='flex items-center justify-between w-[95%] mx-auto'>
+		<main className='mx-auto max-w-screen-xl text-black px-6 flex flex-col'>
+			<header className='flex items-center justify-between w-[95%] mx-auto py-6'>
 				<div className='flex items-center gap-x-2'>
 					<BsCardImage className='h-12 w-12 text-indigo-700' />
 					<p className='text-3xl bg-gradient-to-r from-blue-500 to-rose-400 inline-block text-transparent bg-clip-text font-bold '>
@@ -93,26 +94,39 @@ const HomePage = () => {
 					detalhadas de imagens em segundos!
 				</p>
 			</section>
-			<section className='mx-auto flex items-center justify-center w-[95%]'>
-				<div className='w-[100%] border rounded-xl text-xl bg-neutral-100 p-4'>
-					{isLoading ? (
-						<div className='w-full space-y-2'>
-							<Skeleton className='h-4 w-full' />
-							<Skeleton className='h-4 w-full' />
-							<Skeleton className='h-4 w-full' />
-							<Skeleton className='h-4 w-full' />
-							<Skeleton className='h-4 w-full' />
+			<section className='mx-auto flex items-center justify-center flex-col gap-y-4 w-[95%]'>
+				{isLoading ? (
+					[1, 2, 3].map((i) => (
+						<div
+							key={i}
+							className='w-full border rounded-xl bg-neutral-100 p-4 space-y-4'
+						>
+							<div className='w-full flex items-center justify-between'>
+								<Skeleton className='h-4 w-[130px]' />
+								<Skeleton className='h-8 w-8 rounded-full' />
+							</div>
 							<Skeleton className='h-4 w-full' />
 							<Skeleton className='h-4 w-full' />
 							<Skeleton className='h-4 w-1/2' />
 						</div>
-					) : description ? (
-						Object.values(description).map((text) => <p className='text-justify'>{text}</p>)
-					) : (
-						<p className='font-semibold'>Selecione imagens para obter a descrição</p>
-					)}
-				</div>
+					))
+				) : descriptions ? (
+					descriptions.map((text, i) => (
+						<ImageDescription
+							key={text + i}
+							i={i}
+							description={text}
+						/>
+					))
+				) : (
+					<p className='font-semibold text-xl'>Selecione imagens para obter as descrições</p>
+				)}
 			</section>
+			<footer className='w-full py-6'>
+				<p className='text-center text-sm text-neutral-400'>
+					Lembre-se que o ImageAI é uma aplicação construída com base em modelos de IA
+				</p>
+			</footer>
 		</main>
 	);
 };
