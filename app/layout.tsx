@@ -4,6 +4,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/sonner';
 import { Montserrat } from 'next/font/google';
+import { Viewer } from '@/components/Viewer';
 
 export const montserrat = Montserrat({
 	subsets: ['latin'],
