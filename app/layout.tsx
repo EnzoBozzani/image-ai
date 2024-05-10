@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/react';
 
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/sonner';
@@ -29,6 +30,7 @@ export default function RootLayout({
 			lang='en'
 		>
 			<body className={cn(montserrat.className, 'white-bg')}>
+				<Analytics />
 				{children}
 				<Toaster />
 				<AlertDialog />
