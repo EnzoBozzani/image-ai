@@ -1,6 +1,6 @@
 <h1>ImageAI</h1>
 
-> Status do Projeto: Finalizado (May 05, 2024)
+> Status do Projeto: Finalizado (May 10, 2024)
 
 ## A aplicação está disponível em: [https://image-ai-enzobozzani.vercel.app](https://image-ai-enzobozzani.vercel.app)
 
