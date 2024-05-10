@@ -2,7 +2,7 @@
 
 > Status do Projeto: Finalizado (May 05, 2024)
 
-## A aplicação está disponível em: [https://image.ai.vercel.app](https://image.ai.vercel.app)
+## A aplicação está disponível em: [https://image-ai-enzobozzani.vercel.app](https://image-ai-enzobozzani.vercel.app)
 
 Imagens demonstrativas:
 
