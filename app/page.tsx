@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { toast } from 'sonner';
 import { BsCardImage } from 'react-icons/bs';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
@@ -14,6 +14,10 @@ import { ImageDescription } from '@/components/ImageDescription';
 const HomePage = () => {
 	const [descriptions, setDescriptions] = useState<string[] | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
+
+	const anchorRef = useRef<HTMLDivElement>(null);
+
+	const scrollToBottom = () => anchorRef.current?.scrollIntoView({ behavior: 'smooth' });
 
 	const handleFileSend = async (files: File[]) => {
 		setIsLoading(true);
@@ -38,10 +42,14 @@ const HomePage = () => {
 			}
 		}
 
+		scrollToBottom();
+
 		const res = await generateDescriptions(files);
 
 		if (!res.ok) {
-			toast.error('Ocorreu um erro ao tentar gerar a descrição das imagens!');
+			toast.error('Ocorreu um erro ao tentar gerar a descrição das imagens! Tente novamente.', {
+				description: 'Lembre-se de não enviar conteúdo sensível!',
+			});
 			setIsLoading(false);
 			return;
 		}
@@ -53,7 +61,7 @@ const HomePage = () => {
 
 	return (
 		<main className='mx-auto max-w-screen-xl text-black px-6 flex flex-col'>
-			<header className='flex items-center justify-between w-[95%] mx-auto py-6'>
+			<header className='flex flex-col gap-y-4 sm:flex-row items-center justify-between w-[95%] mx-auto py-6'>
 				<div className='flex items-center gap-x-2'>
 					<BsCardImage className='h-12 w-12 text-indigo-700' />
 					<p className='text-3xl bg-gradient-to-r from-blue-500 to-rose-400 inline-block text-transparent bg-clip-text font-bold '>
@@ -88,6 +96,8 @@ const HomePage = () => {
 				<FileDropzone
 					handleFileSend={handleFileSend}
 					isLoading={isLoading}
+					descriptions={descriptions}
+					setDescriptions={setDescriptions}
 				/>
 				<p className='text-sm sm:text-base text-center text-neutral-600 w-[90%] sm:w-[62%]'>
 					Chega de imagens sem acessibilidade para deficientes visuais... Com o ImageAI, você gera descrições
@@ -121,10 +131,12 @@ const HomePage = () => {
 				) : (
 					<p className='font-semibold text-xl'>Selecione imagens para obter as descrições</p>
 				)}
+				<div ref={anchorRef} />
 			</section>
 			<footer className='w-full py-6'>
 				<p className='text-center text-sm text-neutral-400'>
-					Lembre-se que o ImageAI é uma aplicação construída com base em modelos de IA
+					Lembre-se que o ImageAI é uma aplicação construída com base em modelos de IA, portanto pode
+					apresentar falhas e informações incorretas.
 				</p>
 			</footer>
 		</main>

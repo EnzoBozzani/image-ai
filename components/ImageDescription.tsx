@@ -5,9 +5,9 @@ import { toast } from 'sonner';
 
 export const ImageDescription = ({ description, i }: { description: string; i: number }) => {
 	return (
-		<div className='w-full border rounded-xl text-xl bg-neutral-100 p-4 space-y-4'>
+		<div className='w-full border rounded-xl text-base sm:text-xl bg-neutral-100 p-4 space-y-4'>
 			<div className='w-full flex items-center justify-between'>
-				<h3 className='text-2xl font-bold'>Imagem {i + 1}:</h3>
+				<h3 className='text-xl sm:text-2xl font-bold'>Imagem {i + 1}:</h3>
 				<FiClipboard
 					onClick={() => {
 						navigator.clipboard.writeText(description);

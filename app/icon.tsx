@@ -8,10 +8,10 @@ export const size = {
 	width: 32,
 	height: 32,
 };
-export const contentType = 'image/png';
+export const contentType = 'image/svg';
 
 export default function Icon() {
-	return new ImageResponse(<BsCardImage className='w-full h-full' />, {
+	return new ImageResponse(<BsCardImage className='h-8 w-8' />, {
 		...size,
 	});
 }

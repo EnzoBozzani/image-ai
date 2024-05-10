@@ -1,15 +1,17 @@
 import { useDropzone } from 'react-dropzone';
 
 import { cn } from '@/lib/utils';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { XIcon } from 'lucide-react';
 
 interface FileDropzoneProps {
 	isLoading: boolean;
 	handleFileSend: (files: File[]) => void;
+	descriptions: string[] | null;
+	setDescriptions: Dispatch<SetStateAction<string[] | null>>;
 }
 
-export const FileDropzone = ({ isLoading, handleFileSend }: FileDropzoneProps) => {
+export const FileDropzone = ({ isLoading, handleFileSend, descriptions, setDescriptions }: FileDropzoneProps) => {
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
 		accept: {
 			'image/jpeg': [],
@@ -56,6 +58,16 @@ export const FileDropzone = ({ isLoading, handleFileSend }: FileDropzoneProps) =
 				<aside className='p-4'>
 					<h4 className='font-semibold'>Imagens:</h4>
 					<ul>{acceptedFileItems}</ul>
+					{descriptions && (
+						<div
+							className='mt-8 w-full flex items-center justify-center'
+							onClick={() => setDescriptions(null)}
+						>
+							<button className='text-white bg-red-500 px-4 py-2 border rounded-xl'>
+								Limpar descrições
+							</button>
+						</div>
+					)}
 				</aside>
 			</section>
 			<button
