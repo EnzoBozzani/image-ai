@@ -52,8 +52,8 @@ export const FileDropzone = ({ isLoading, handleFileSend, descriptions, setDescr
 					className='bg-neutral-100 border-4 border-dashed p-8 cursor-pointer hover:border-blue-500'
 				>
 					<input {...getInputProps()} />
-					<p className='text-center'>(Somente imagens *.jpeg e *.png serão aceitas!)</p>
-					<p className='text-center'>Clique aqui para adicionar arquivos!</p>
+					<p className='text-center'>Clique aqui para adicionar arquivos (máx. 5)</p>
+					<p className='text-center'>Somente imagens *.jpeg e *.png serão aceitas!</p>
 				</div>
 				<aside className='p-4'>
 					<h4 className='font-semibold'>Imagens:</h4>

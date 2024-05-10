@@ -28,8 +28,8 @@ const HomePage = () => {
 			return;
 		}
 
-		if (files.length > 10) {
-			toast.error('Você só pode enviar até 10 imagens por vez!');
+		if (files.length > 5) {
+			toast.error('Você só pode enviar até 5 imagens por vez!');
 			setIsLoading(false);
 			return;
 		}
