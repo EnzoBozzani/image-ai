@@ -1,6 +1,6 @@
 <h1>ImageAI</h1>
 
-> Status do Projeto: Finalizado (May 10, 2024)
+> Status do Projeto: Finalizado (10 de Maio, 2024)
 
 ## A aplicação está disponível em: [https://image-ai-enzobozzani.vercel.app](https://image-ai-enzobozzani.vercel.app)
 
@@ -14,7 +14,7 @@ Imagens demonstrativas:
 ## Descrição do projeto
 
 <p align="justify">
-   ImageAI é uma aplicação web construída com TypeScript e Next.js usando a API do Gemini para gerar descrições detalhadas das imagens, melhorando a acessibilidade para deficientes visuais..
+   ImageAI é uma aplicação web construída com TypeScript e Next.js usando a API do Gemini para gerar descrições detalhadas das imagens, melhorando a acessibilidade para deficientes visuais.
 </p>
 
 ## Tech Stack
@@ -33,7 +33,7 @@ Imagens demonstrativas:
 
 ## Rodar aplicação:
 
-Clone project:
+Clone o projeto:
 
 ```
 git clone https://github.com/EnzoBozzani/image-ai.git
@@ -45,13 +45,13 @@ Configurar variáveis de ambiente:
 NEXT_PUBLIC_API_KEY=
 ```
 
-Install dependencies:
+Instale as dependências:
 
 ```
 npm install
 ```
 
-Run project:
+Rode o projeto:
 
 ```
 npm run dev
