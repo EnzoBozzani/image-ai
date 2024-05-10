@@ -3,6 +3,7 @@ import { Montserrat } from 'next/font/google';
 
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/sonner';
+import { AlertDialog } from '@/components/AlertDialog';
 
 import './globals.css';
 
@@ -14,7 +15,7 @@ export const montserrat = Montserrat({
 
 export const metadata: Metadata = {
 	title: 'ImageAI',
-	description: 'Acessibilidade já! Crie descrições de imagens!',
+	description: 'Adicione acessibilidade em suas imagens! Crie descrições para deficientes visuais!',
 };
 
 export default function RootLayout({
@@ -23,10 +24,14 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang='en'>
+		<html
+			suppressHydrationWarning
+			lang='en'
+		>
 			<body className={cn(montserrat.className, 'white-bg')}>
 				{children}
 				<Toaster />
+				<AlertDialog />
 			</body>
 		</html>
 	);
